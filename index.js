@@ -21,10 +21,12 @@ function nodeMouseDown(e, index) {
     pos0 = points[nodeIndex];
     mouse0 = [e.clientX, e.clientY];
     mouseDown = true;
+    document.getElementById("info").innerHTML = `Node ${nodeIndex}`;
 }
 
 function up(e) {
     mouseDown = false;
+    document.getElementById("info").innerHTML = "";
 }
 
 function move(e) {
@@ -70,7 +72,7 @@ function subdivide(geod, i) {
  * @param {*} p1 Array with [rho, theta] polar coordinates of 2nd point
  */
 function edgeSVG(p0, p1) {
-    let str = `<path fill="none" stroke="white" d="`;
+    let str = `<path fill="none" stroke="black" d="`;
     const geod = [p0, p1];
 
     subdivide(geod, 0);
@@ -138,21 +140,14 @@ function draw() {
     // clear
     const c1 = W/Math.sqrt(2);
     const c2 = (W-c1)/2;
+    const bg="#d0d0d0";
     document.getElementById("view").innerHTML = `
-    <circle cx=${W2} cy=${W2} r=${W2} fill="none" stroke="#808080"/>
-    <circle cx=${W2} cy=${W2} r=${3*W2/4} fill="none" stroke="#808080"/>
-    <circle cx=${W2} cy=${W2} r=${W2/2} fill="none" stroke="#808080"/>
-    <circle cx=${W2} cy=${W2} r=${W2/4} fill="none" stroke="#808080"/>
-    <path d="M0,${W2}L${W},${W2} M${W2},0L${W2},${W} M${c2},${c2}l${c1},${c1} M${c2},${W-c2}l${c1},${-c1}" fill="none" stroke="#808080"/>
+    <circle cx=${W2} cy=${W2} r=${W2} fill="none" stroke="${bg}"/>
+    <circle cx=${W2} cy=${W2} r=${3*W2/4} fill="none" stroke="${bg}"/>
+    <circle cx=${W2} cy=${W2} r=${W2/2} fill="none" stroke="${bg}"/>
+    <circle cx=${W2} cy=${W2} r=${W2/4} fill="none" stroke="${bg}"/>
+    <path d="M0,${W2}L${W},${W2} M${W2},0L${W2},${W} M${c2},${c2}l${c1},${c1} M${c2},${W-c2}l${c1},${-c1}" fill="none" stroke="${bg}"/>
     `;
-
-    // draw circles
-    for(let i=0; i<points.length; i++) {
-        const p = points[i];
-        document.getElementById("view").innerHTML += `<circle 
-            onmousedown="nodeMouseDown(event, ${i})" 
-            cx=${p[0]} cy=${p[1]} r=5 fill="white" />\n`;
-    }
 
     // draw edges
     for(let i=0;i<edges.length;i++) {
@@ -161,6 +156,13 @@ function draw() {
         const str = edgeSVG(p0, p1);
         document.getElementById("view").innerHTML += str;
     }
+
+    // draw circles
+    for(let i=0; i<points.length; i++) {
+        const p = points[i];
+        document.getElementById("view").innerHTML += `<circle class="node" id=${i} cx=${p[0]} cy=${p[1]} r=5 fill="black" />\n`;
+    }
+
 }
 
 function parseGraph(str) {
@@ -221,6 +223,11 @@ function loadFile(file) {
         draw();
         document.getElementById("view").style.display="inline-block";
         document.getElementById("drop_zone").style.display="none";
+        document.body.addEventListener("click", event => {
+            if (event.target.classList.contains("node")) {
+                nodeMouseDown(event, event.target.id)
+            }
+        });
     }
     reader.readAsText(file);
 }
