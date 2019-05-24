@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+</head>
+<body>
+    <style>
+        #view {
+            display:none;
+            width:100%;
+            max-width:100%;
+            max-height:100%;
+            background: #555;
+        }
+        #drop_zone {
+            display:block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width:256px;
+            height:256px;
+            border:5px dashed #999;
+            background: #eee;
+        }
+        #drop_zone_text {
+            display:block;
+            position: absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+            text-align: center;
+        }
+        #drop_zone.over {
+            background:#aaa;
+        }
+    </style>
+
+    <div id="drop_zone">
+        <span id="drop_zone_text">
+            Drop your graph file here
+        </span>
+    </div>
+
+    <button onclick="saveGraph()">Save Graph</button>
+    <button onclick="saveSVG()">Save SVG</button>
+
+    <svg id="view" width=1200px height=1200px>
+    </svg>
+    <script src="index.js"></script>         
+</body>
+
+</html>
