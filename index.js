@@ -5,10 +5,9 @@ let i = 0;
 const W = 1200;
 const W2 = W/2;
 let mouseDown = false;
-let nodeIndex = 0;
+let nodeIndex = -1;
 let pos0, mouse0;
 document.addEventListener('mousemove', move);
-document.addEventListener('mouseup', up);
 var dropZone = document.getElementById('drop_zone');
 dropZone.addEventListener('dragover', handleDragOver, false);
 dropZone.addEventListener('dragleave', handleDragLeave, false);
@@ -17,16 +16,17 @@ window.nodeMouseDown = nodeMouseDown;
 window.nodeMouseDown = nodeMouseDown;
 
 function nodeMouseDown(e, index) {
-    nodeIndex = index;
-    pos0 = points[nodeIndex];
-    mouse0 = [e.clientX, e.clientY];
-    mouseDown = true;
-    document.getElementById("info").innerHTML = `Node ${nodeIndex}`;
-}
-
-function up(e) {
-    mouseDown = false;
-    document.getElementById("info").innerHTML = "";
+    if( nodeIndex >= 0) {
+        nodeIndex = -1;
+        mouseDown = false;
+        document.getElementById("info").innerHTML = "";
+    } else {
+        nodeIndex = index;
+        pos0 = points[nodeIndex];
+        mouse0 = [e.clientX, e.clientY];
+        mouseDown = true;
+        document.getElementById("info").innerHTML = `Node ${nodeIndex}`;
+    }
 }
 
 function move(e) {
@@ -160,7 +160,10 @@ function draw() {
     // draw circles
     for(let i=0; i<points.length; i++) {
         const p = points[i];
-        document.getElementById("view").innerHTML += `<circle class="node" id=${i} cx=${p[0]} cy=${p[1]} r=5 fill="black" />\n`;
+        document.getElementById("view").innerHTML +=
+        `<circle onclick="nodeMouseDown(event,${i})"
+                 cx=${p[0]} cy=${p[1]}
+                 fill="black" />\n`;
     }
 
 }
@@ -223,11 +226,12 @@ function loadFile(file) {
         draw();
         document.getElementById("view").style.display="inline-block";
         document.getElementById("drop_zone").style.display="none";
-        document.body.addEventListener("click", event => {
+        /* document.body.addEventListener("click", event => {
             if (event.target.classList.contains("node")) {
                 nodeMouseDown(event, event.target.id)
             }
         });
+        */
     }
     reader.readAsText(file);
 }
