@@ -161,7 +161,7 @@ function draw() {
     for(let i=0; i<points.length; i++) {
         const p = points[i];
         document.getElementById("view").innerHTML +=
-        `<circle onclick="nodeMouseDown(event,${i})"
+        `<circle class="graph" onclick="nodeMouseDown(event,${i})"
                  cx=${p[0]} cy=${p[1]}
                  fill="black" />\n`;
     }
