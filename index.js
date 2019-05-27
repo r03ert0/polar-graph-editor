@@ -7,13 +7,19 @@ const W2 = W/2;
 let mouseDown = false;
 let nodeIndex = -1;
 let pos0, mouse0;
-document.addEventListener('mousemove', move);
+
+// install event listeners
+document.getElementById("view").addEventListener('mousedown', (event) => {
+    if(event.target.classList.contains("graph")) {
+        const id = event.target.id;
+        nodeMouseDown(event,id);
+    }
+});
+document.getElementById("view").addEventListener('mousemove', move);
 var dropZone = document.getElementById('drop_zone');
 dropZone.addEventListener('dragover', handleDragOver, false);
 dropZone.addEventListener('dragleave', handleDragLeave, false);
 dropZone.addEventListener('drop', handleFileSelect, false);
-window.nodeMouseDown = nodeMouseDown;
-window.nodeMouseDown = nodeMouseDown;
 
 function nodeMouseDown(e, index) {
     if( nodeIndex >= 0) {
@@ -26,6 +32,7 @@ function nodeMouseDown(e, index) {
         mouse0 = [e.clientX, e.clientY];
         mouseDown = true;
         document.getElementById("info").innerHTML = `Node ${nodeIndex}`;
+        document.getElementById(index).setAttribute("fill", "red");
     }
 }
 
@@ -43,7 +50,7 @@ function subdivide(geod, i) {
     const s0 = polarToScreen(geod[i]);
     const s1 = polarToScreen(geod[i+1]);
     const min = 50;
-    const maxStack = 500;
+    const maxStack = 100;
 
     if((s0[0]-s1[0])**2 + (s0[1]-s1[1])**2 > min**2) {
         const p0 = polarToEuclidean(geod[i]);
@@ -150,21 +157,25 @@ function draw() {
     `;
 
     // draw edges
+    let edgesStr = "";
     for(let i=0;i<edges.length;i++) {
         const p0 = screenToPolar(points[edges[i][0]]);
         const p1 = screenToPolar(points[edges[i][1]]);
         const str = edgeSVG(p0, p1);
-        document.getElementById("view").innerHTML += str;
+        edgesStr += str;
     }
+    document.getElementById("view").innerHTML += edgesStr;
 
     // draw circles
+    let circlesStr = "";
     for(let i=0; i<points.length; i++) {
         const p = points[i];
-        document.getElementById("view").innerHTML +=
-        `<circle class="graph" onclick="nodeMouseDown(event,${i})"
+        circlesStr +=
+        `<circle class="graph" id="${i}"
                  cx=${p[0]} cy=${p[1]}
                  fill="black" />\n`;
     }
+    document.getElementById("view").innerHTML += circlesStr;
 
 }
 
