@@ -1,0 +1,1 @@
+// const pol = require("./index.js", "utf8");

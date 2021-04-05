@@ -1,73 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Polar Graph Editor</title>
+  <title>Polar Graph Editor</title>
 </head>
-<body pointer-events: none">
-    <style>
-        #view {
-            display:none;
-            width:100%;
-            max-width:100%;
-            max-height:100%;
-            background: #eee;
-        }
-        #drop_zone {
-            display:block;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-            width:256px;
-            height:256px;
-            border:5px dashed #999;
-            background: #eee;
-        }
-        #drop_zone_text {
-            display:block;
-            position: absolute;
-            top:50%;
-            left:50%;
-            transform: translate(-50%,-50%);
-            text-align: center;
-        }
-        #drop_zone.over {
-            background:#aaa;
-        }
-        #info {
-            position: fixed;
-            top: 5px;
-            left: 5px;
-        }
-        circle.graph {
-            stroke: none;
-            r: 5;
-        }
-        circle.graph:hover {
-            fill:red;
-            r: 7;
-        }
-    </style>
-
-    <div id="drop_zone">
-        <span id="drop_zone_text">
-            Drop your graph file here
-        </span>
-    </div>
-
+<body>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      pointer-events: "none";
+    }
+    #view {
+      display:none;
+      width:100%;
+      max-width:100%;
+      max-height:100%;
+      background: #eee;
+    }
+    #drop_zone {
+      display:block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      width:256px;
+      height:256px;
+      border:5px dashed #999;
+      background: #eee;
+    }
+    #drop_zone_text {
+      display:block;
+      position: absolute;
+      top:50%;
+      left:50%;
+      transform: translate(-50%,-50%);
+      text-align: center;
+    }
+    #drop_zone.over {
+      background:#aaa;
+    }
+    #info {
+      position: fixed;
+      top: 5px;
+      left: 5px;
+    }
+    #buttons {
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 10px;
+      margin: 5px;
+      background: #dddddd;
+      z-index: 1;
+    }
+    circle.graph {
+      stroke: none;
+      r: 5;
+    }
+    circle.graph:hover {
+      fill:red;
+      r: 7;
+    }
+  </style>
+  
+  <div id="drop_zone">
+    <span id="drop_zone_text">
+      Drop your graph file here
+    </span>
+  </div>
+  
+  <div id="buttons">
     <button onclick="saveGraph()">Save Graph</button>
     <button onclick="saveSVG()">Save SVG</button>
-
+  </div>
+  
+  
+  <div style="position:relative">
+    <svg id="view" width="1200px" height="1200px">
+    </svg>
     
-    <div style="position:relative">
-        <svg id="view" width=1200px height=1200px>
-        </svg>
-
-        <div id="info">
-        </div>
+    <div id="info">
     </div>
-
-    <script src="index.js"></script>         
+  </div>
+  
+  <script src="linalg.js"></script>
+  <script src="index.js"></script>
+  <script>
+    init();
+  </script>
 </body>
 
 </html>
